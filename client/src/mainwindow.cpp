@@ -14,8 +14,8 @@ MainWindow::MainWindow() {
     QVBoxLayout *col1Lay = new QVBoxLayout();
     QVBoxLayout *col2Lay = new QVBoxLayout();
     QVBoxLayout *col3Lay = new QVBoxLayout();
-    this->setLayout(mainHLay);
 
+    this->setLayout(mainHLay);
     m_searchEdit = new QLineEdit(this);
 
     QHBoxLayout *catLay = new QHBoxLayout();
@@ -24,7 +24,6 @@ MainWindow::MainWindow() {
         QString catName = categories[i];
         QPushButton *catBtn = new QPushButton(catName, this);
         catLay->addWidget(catBtn);
-
         connect(catBtn, &QPushButton::clicked, [this, catName]() {
             selectCategory(catName);
         });
@@ -52,9 +51,8 @@ MainWindow::MainWindow() {
     QLabel *menuLabel = new QLabel("Меню на неделю:", this);
     m_menuTable = new QTableWidget(7, 2, this);
     m_menuTable->setHorizontalHeaderLabels({"День недели", "Блюдо"});
-    m_menuTable->setColumnWidth(0, 110);
+    m_menuTable->setColumnWidth(0, 120);
     m_menuTable->setColumnWidth(1, 150); 
-    m_menuTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
     m_menuTable->setFixedSize(colSize);
 
     QPushButton *clearBtn = new QPushButton("Очистить день", this);
@@ -68,8 +66,8 @@ MainWindow::MainWindow() {
     mainHLay->addLayout(col2Lay);
     mainHLay->addLayout(col3Lay);
 
-    setFixedSize(colSize.width() * 3 + 60, colSize.height() + btnSize.height() + 80);
-
+    setFixedSize(colSize.width() * 3 + 40, colSize.height() + btnSize.height() + 80);
+    
     connect(m_searchEdit, &QLineEdit::textChanged, this, &MainWindow::updateList);
     connect(m_listWidget, &QListWidget::itemSelectionChanged, this, &MainWindow::showRecipe);
     connect(toMenuBtn, &QPushButton::clicked, this, &MainWindow::addToWeek);
@@ -88,7 +86,6 @@ void MainWindow::selectCategory(QString category) {
 void MainWindow::updateList() {
     m_listWidget->clear();
     m_detailsEdit->clear();
-
     m_currentRecipes = m_manager.findRecipes(m_searchEdit->text(), m_currentCategory);
     for (int i = 0; i < m_currentRecipes.size(); i++) {
         m_listWidget->addItem(m_currentRecipes[i].name);
@@ -105,9 +102,7 @@ void MainWindow::updateMenuTable() {
 void MainWindow::showRecipe() {
     int row = m_listWidget->currentRow();
     if (row < 0) return;
-
     Recipe r = m_currentRecipes[row];
-
     m_detailsEdit->setText("Название: " + r.name + "\n\n" +
                            "Категория: " + r.category + "\n\n" +
                            "Ингредиенты:\n" + r.ingredients + "\n\n" +
@@ -118,7 +113,6 @@ void MainWindow::addToWeek() {
     int recipeRow = m_listWidget->currentRow();
     int dayRow = m_menuTable->currentRow();
     if (recipeRow < 0 || dayRow < 0) return;
-
     m_manager.setDayMeal(dayRow, m_currentRecipes[recipeRow].name);
     updateMenuTable();
 }
