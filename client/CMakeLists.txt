@@ -11,3 +11,6 @@ file(GLOB_RECURSE HEADERS "src/*.hpp")
 add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Widgets Qt6::Gui Qt6::Network)
+
+enable_testing()
+add_subdirectory(tests)
